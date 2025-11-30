@@ -38,22 +38,58 @@ Trabalho desenvolvido como parte da disciplina de Ciência de Dados / Séries Te
 
  Neste projeto foi utilizada apenas uma das séries disponíveis (PJM_Load_hourly.csv), representando a carga total do sistema PJM.
 
-## ✂️ Redução / Recorte do Dataset
 
-Para tornar a análise mais manejável:
+## 📊 Análise do Dataset
 
-- Foi selecionado apenas o arquivo PJM_Load_hourly.csv (carga total).
-- Dentro dessa série, utilizamos todo o período disponível, mas agregando para frequência diária em algumas etapas:
-  - Média diária da demanda (mean)
-  - Máximo diário (max) para identificar dias críticos.
+### 1. Descrição completa do dataset
 
-Esse recorte mantém:
+- **Origem da base de dados**  
+  O conjunto de dados utilizado é o **“Hourly Energy Consumption”** disponível no Kaggle, originalmente publicado por Rob Mulla a partir de dados históricos da **PJM Interconnection**. A PJM é um *Regional Transmission Organization (RTO)* que coordena o sistema de transmissão de energia elétrica e o mercado atacadista de energia em diversas regiões dos Estados Unidos.  
+  Trata-se, portanto, de uma fonte **oficial e confiável**, amplamente utilizada em estudos acadêmicos e exemplos de séries temporais.
 
-- um volume de dados adequado para análise temporal,
-- ciclos sazonais anuais completos,
-- e ao mesmo tempo mantém o processamento leve nos notebooks.
+- **Como o dataset foi coletado**  
+  Os valores de demanda são medidos por sistemas operacionais da PJM (por exemplo, sistemas SCADA e medidores instalados em subestações e pontos de medição do sistema elétrico). Esses dados são agregados e disponibilizados como séries históricas de **demanda horária**, sendo posteriormente organizados e publicados em formato tabular (CSV) no Kaggle.
 
-  ## 🧪 Notebooks e Análises
+- **Tipo de dado coletado**  
+  O dataset contém, em essência:
+  - Um carimbo de **data e hora** (`timestamp`), com granularidade de **1 hora**;
+  - A **demanda de energia elétrica** em **MW (megawatts)** para uma determinada região ou para o sistema como um todo.  
+
+  No repositório original existem vários arquivos, cada um representando uma área/região (AEP, COMED, DAYTON, PJM total etc.).  
+  Neste projeto foi utilizado especificamente o arquivo:
+
+  - `PJM_Load_hourly.csv` – demanda horária total do sistema PJM.
+
+---
+
+### 2. Redução / Recorte do dataset
+
+O conjunto original contém séries extensas, com vários anos de dados e múltiplas regiões.  
+Para tornar a análise mais manejável e focada, foram feitas **duas reduções principais**:
+
+1. **Seleção de apenas uma série/região**  
+   Entre todos os arquivos disponibilizados, foi escolhido apenas:
+   - `PJM_Load_hourly.csv`, que representa a **carga total do sistema PJM**.  
+
+   Isso simplifica a análise (sem múltiplas regiões) e mantém um sinal forte e representativo do comportamento global da demanda.
+
+2. **Recorte temporal da série**  
+   Em vez de utilizar todo o histórico disponível, o projeto trabalhou com a janela:
+
+   > **de 1998 até 2002**
+
+   Esse recorte foi adotado pelos seguintes motivos:
+
+   - Garante a presença de **vários ciclos sazonais completos** (aproximadamente 4 anos de dados);
+   - Mantém um **volume de dados suficiente** para análise de tendência, sazonalidade e ajuste de modelos (ARIMA, médias móveis, etc.), sem tornar o tempo de processamento excessivo;
+   - Facilita o uso em ambientes interativos (como Google Colab), onde memória e tempo de execução são limitados.
+
+Em resumo:
+
+> “Escolhemos a janela de **1998–2002** pois apresenta padrões sazonais completos, comportamento representativo da demanda e um volume de dados adequado para experimentação, modelagem e integração com Redis, mantendo o projeto leve e reprodutível.”
+
+
+## 🧪 Notebooks e Análises
 
   01_eda_pjm.ipynb – Análise Exploratória (EDA)
 
